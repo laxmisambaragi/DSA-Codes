@@ -1,0 +1,70 @@
+#include <stdio.h>
+
+#define TABLE_SIZE 11
+
+int hashTable[TABLE_SIZE];
+
+// Function to initialize the hash table
+void initializeHashTable() {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        hashTable[i] = -1;  // -1 indicates an empty slot in the hash table
+    }
+}
+
+// Function to calculate the first hash value (h1 = k % 11)
+int hashFunction1(int key) {
+    return key % TABLE_SIZE;
+}
+
+// Function to calculate the second hash value (h2 = 8 - (8 % k))
+int hashFunction2(int key) {
+    return 8 - (8 % key);
+}
+
+// Function to insert a key into the hash table
+void insert(int key) {
+    int index = hashFunction1(key);
+    if (hashTable[index] == -1) {
+        hashTable[index] = key;
+    } else {
+        int step = hashFunction2(key);
+        int i = 1;
+        while (1) {
+            int newIndex = (index + (i * step)) % TABLE_SIZE;
+            if (hashTable[newIndex] == -1) {
+                hashTable[newIndex] = key;
+                break;
+            }
+            i++;
+        }
+    }
+}
+
+// Function to display the contents of the hash table
+void displayHashTable() {
+    printf("Hash Table:\n");
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        printf("%d: ", i);
+        if (hashTable[i] != -1) {
+            printf("%d", hashTable[i]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    // Initialize the hash table
+    initializeHashTable();
+
+    // Insert some keys into the hash table
+    insert(22);
+    insert(33);
+    insert(44);
+    insert(55);
+    insert(66);
+
+    // Display the hash table
+    displayHashTable();
+
+    return 0;
+}
